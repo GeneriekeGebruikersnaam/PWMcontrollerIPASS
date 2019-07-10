@@ -38,7 +38,7 @@ Discarded input sections
                 0x0000000000000000        0x4 PWMcontroller.o
  .text._ZN5hwlib9uart_getcEv
                 0x0000000000000000        0x4 PWMcontroller.o
- .text._ZN7PCA968511sendChannelERKi
+ .text._ZN13PWMcontroller11sendChannelERKi
                 0x0000000000000000        0x2 PWMcontroller.o
  .bss._ZZN3due9now_ticksEvE4high
                 0x0000000000000000        0x8 PWMcontroller.o
@@ -57,6 +57,10 @@ Discarded input sections
  .rodata._ZZN3due8pin_infoENS_4pinsEE14pin_info_array
                 0x0000000000000000       0xa4 PWMcontroller.o
  .comment       0x0000000000000000       0x80 PWMcontroller.o
+ .text          0x0000000000000000        0x0 servo.o
+ .data          0x0000000000000000        0x0 servo.o
+ .bss           0x0000000000000000        0x0 servo.o
+ .comment       0x0000000000000000       0x80 servo.o
  .group         0x0000000000000000        0x8 hwlib.o
  .group         0x0000000000000000        0x8 hwlib.o
  .group         0x0000000000000000        0x8 hwlib.o
@@ -1130,6 +1134,7 @@ Linker script and memory map
 
 LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a
 LOAD PWMcontroller.o
+LOAD servo.o
 LOAD hwlib.o
 LOAD main.o
 LOAD bmptk_cortex.o
@@ -1329,21 +1334,23 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
  .ARM.attributes
                 0x0000000000000000       0x33 PWMcontroller.o
  .ARM.attributes
-                0x0000000000000033       0x33 hwlib.o
+                0x0000000000000033       0x33 servo.o
  .ARM.attributes
-                0x0000000000000066       0x33 main.o
+                0x0000000000000066       0x33 hwlib.o
  .ARM.attributes
-                0x0000000000000099       0x33 bmptk_cortex.o
+                0x0000000000000099       0x33 main.o
  .ARM.attributes
-                0x00000000000000cc       0x33 bmptk_heap_none.o
+                0x00000000000000cc       0x33 bmptk_cortex.o
  .ARM.attributes
-                0x00000000000000ff       0x33 bmptk_fixed_size_stack.o
+                0x00000000000000ff       0x33 bmptk_heap_none.o
  .ARM.attributes
-                0x0000000000000132       0x1d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
+                0x0000000000000132       0x33 bmptk_fixed_size_stack.o
  .ARM.attributes
-                0x000000000000014f       0x2d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
+                0x0000000000000165       0x1d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
  .ARM.attributes
-                0x000000000000017c       0x1d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_dvmd_tls.o)
+                0x0000000000000182       0x2d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
+ .ARM.attributes
+                0x00000000000001af       0x1d /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_dvmd_tls.o)
 
 /DISCARD/
  *(.note.GNU-stack)

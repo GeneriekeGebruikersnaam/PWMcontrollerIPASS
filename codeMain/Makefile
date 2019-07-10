@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := PWMcontroller.cpp
+SOURCES := PWMcontroller.cpp servo.cpp
 
 # header files in this project
-HEADERS := PWMcontroller.hpp
+HEADERS := PWMcontroller.hpp servo.hpp
 
 # other places to look for files for this project
 SEARCH  := 
