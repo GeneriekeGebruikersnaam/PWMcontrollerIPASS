@@ -3,6 +3,7 @@
 
 #include "hwlib.hpp"
 #include <stdint.h>
+#include <cmath>
 
 
 /// @file
@@ -30,7 +31,7 @@ class PWMcontroller
 /// It just sets the number of bits and channels the chip has.
         PWMcontroller(int bits = 0, int channels = 0):
             bits(bits),
-            channels(channels),
+            channels(channels)
             {}
 
 /// \brief
@@ -42,7 +43,7 @@ class PWMcontroller
         PWMcontroller(int bits, int channels, bool oscillator, int oscillatorClock):
             bits(bits),
             channels(channels),
-            oscillator(oscillator)
+            oscillator(oscillator),
             oscillatorClock(oscillatorClock)
             {}
 
@@ -52,7 +53,7 @@ class PWMcontroller
 /// This function sends a given signal to a given channel.
 /// It is checked if the given channel is within the range of channels corresponding to the chip.
 /// If the channel isn't within that range, it'll do nothing and skip the function entirely.
-        void writeChannel(const int &channel, int[6] message);
+        void writeChannel(const int &channel, int message [6]);
 
 /// \brief
 /// Reads a channel
@@ -63,9 +64,9 @@ class PWMcontroller
 /// \brief
 /// Sets a PWM controller's frequency
 /// \details
-/// This function sets a PWM controller's internal frequency.
-/// This function is not worked out as I have no clue if there's a universal formula for frequencies.
-        void setFrequency(int frequency);
+/// This function is based on the formula for PCA9685 - my only point of reference.
+/// With that chip it works as in this function, other chips may need doublechecking or an overriden function in a specific class.
+        void setFrequency(const int &frequency);
 };
 
 /// \brief
@@ -88,14 +89,7 @@ class PCA9685 : public PWMcontroller
         PCA9685():
             PWMcontroller(12, 16, true, 25'000'000)     // 12 bits and 16 channels are the PCA9685's values.
             {}                                          // There is an oscillator and its clock is 25MHz.
-
-/// \brief
-/// Sets PCA9685's frequency
-/// \details
-/// This function sets the PCA9685's onboard frequency.
-/// This function is PCA9685 specific and is overridden.
-        override void setFrequency(int frequency);
-        
+       
 };
 
 #endif //PWMCONTROLLER_HPP

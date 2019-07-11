@@ -21,6 +21,9 @@ class servo
         const int maxRotation;
         const int frequency;
 
+        void setFrequency();
+        int checkDegrees(int &degrees);
+
     public:
 
 /// \brief
@@ -30,7 +33,13 @@ class servo
         servo(int &maxRotation, int &frequency):
             maxRotation(maxRotation),
             frequency(frequency)
-            {}
+            {setFrequency();}
+
+/// \brief
+/// Move servo for degrees
+/// \details
+/// This function moves a servo for a given amount of degrees.
+        void moveDegrees(int &degrees);
 };
 
 #endif //SERVO_HPP
