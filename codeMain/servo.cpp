@@ -1,20 +1,20 @@
 #include "servo.hpp"
 
-void servo::setFrequency()
-{
-    PCA9685 controller;
-    controller.setFrequency(servo::frequency);
-}
-
-int servo::checkDegrees(int &degrees)
+uint8_t servo::checkDegrees(uint8_t degrees)
 {
     if(degrees < 0 || degrees > servo::maxRotation){return maxRotation / 2;}
     return degrees;
 }
 
-void servo::moveDegrees(int &degrees)
+uint8_t servo::convertDegreesMessage(uint8_t degrees)
 {
     degrees = servo::checkDegrees(degrees);
-    PCA9685 controller;
-    controller.writeChannel(/* Put degrees in here */);
+    //servo::constante * degrees;
+    return /*Convert the degrees to the right message for a channel on the PWMcontroller*/ 0;
+}
+
+void servo::moveDegrees(uint8_t degrees)
+{
+    degrees = servo::convertDegreesMessage(degrees);
+    servo::kaas.writeChannel(servo::id, degrees);
 }

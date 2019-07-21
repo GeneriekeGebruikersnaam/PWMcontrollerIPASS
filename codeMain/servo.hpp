@@ -1,5 +1,5 @@
 #ifndef SERVO_HPP
-#define SEVOHPP
+#define SERVO_HPP
 
 #include "PWMcontroller.hpp"
 
@@ -18,11 +18,13 @@
 class servo
 {
     private:
-        const int maxRotation;
-        const int frequency;
+        const uint8_t maxRotation;
+        const int id;
+        PWMcontroller kaas;
+        const uint8_t constante = pow(2, kaas.bits) / maxRotation;;
 
-        void setFrequency();
-        int checkDegrees(int &degrees);
+        uint8_t checkDegrees(uint8_t degrees);
+        uint8_t convertDegreesMessage(uint8_t degrees);
 
     public:
 
@@ -30,16 +32,17 @@ class servo
 /// Constructor for class servo
 /// \details
 /// This constructor asks for the maximum amount of degrees the servo can rotate for.
-        servo(int &maxRotation, int &frequency):
+        servo(uint8_t maxRotation, int id, PWMcontroller kaas):
             maxRotation(maxRotation),
-            frequency(frequency)
-            {setFrequency();}
+            id(id),
+            kaas(kaas)
+            {}
 
 /// \brief
 /// Move servo for degrees
 /// \details
 /// This function moves a servo for a given amount of degrees.
-        void moveDegrees(int &degrees);
+        void moveDegrees(uint8_t degrees);
 };
 
 #endif //SERVO_HPP

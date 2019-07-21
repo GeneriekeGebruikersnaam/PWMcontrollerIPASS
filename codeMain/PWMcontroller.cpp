@@ -1,33 +1,24 @@
 #include "PWMcontroller.hpp"
 
-void PWMcontroller::writeChannel(const int &channel, int message [6])
+void PWMcontroller::writeChannel(const uint8_t &slaveAddress, uint8_t &message)
+{
+    PWMcontroller::i2cBus.write(slaveAddress).write(message);
+}
+
+uint8_t PWMcontroller::readChannel(uint8_t &slaveAddress, uint8_t &channel)
 {
     if(channel <= PWMcontroller::channels && channel > 0)
     {
-        int toWrite [8];
-        toWrite [0] = 1;
-        toWrite [7] = 0;
-        for(int i = 1; i < 7; i++)
-        {
-            toWrite [i] = message [i-1];
-        }
+        return PWMcontroller::i2cBus.read(slaveAddress).read(channel);
     }
-
-    // Write int[8] toWrite to PWM controller on channel
-
+    return 0x0;
 }
 
-uint8_t PWMcontroller::readChannel(const int &channel)
+void PWMcontroller::setFrequency(uint8_t frequency)
 {
-    if(channel <= PWMcontroller::channels && channel > 0)
+    if(PWMcontroller::oscillator == true)
     {
-        // return channel's value
+        PWMcontroller::i2cBus.write(PWMcontroller::prescaleAddress).write(((PWMcontroller::oscillatorClock / (pow(2,PWMcontroller::bits) * frequency)) - 1));
+        /// Write this to PWM controller's prescale register 
     }
-    return 0;
-}
-
-void PWMcontroller::setFrequency(const int &frequency)
-{
-    ((PWMcontroller::oscillatorClock / (pow(2,PWMcontroller::bits) * frequency)) - 1);
-    /// Write this to PWM controller's prescale register 
 }
