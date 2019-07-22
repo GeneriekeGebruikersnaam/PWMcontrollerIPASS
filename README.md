@@ -10,3 +10,6 @@ Second commit with this readme.
 
 21-7-2019:
 Headers are likely final. Implementation still needs editing as it misses some core functionalities.
+
+22-7-2019:
+Headers are, once again, likely final. Further work on implementation has been given up.
