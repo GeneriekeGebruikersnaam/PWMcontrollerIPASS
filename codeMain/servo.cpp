@@ -1,20 +1,25 @@
+//              Copyright Joram van Leeuwen 2019
+// Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)
+
+
 #include "servo.hpp"
 
-uint8_t servo::checkDegrees(uint8_t degrees)
+void servo::checkDegrees()
 {
-    if(degrees < 0 || degrees > servo::maxRotation){return maxRotation / 2;}
-    return degrees;
+    if(servo::degrees < 0 || servo::degrees > servo::maxRotation){servo::degrees = maxRotation / 2;}
 }
 
-uint8_t servo::convertDegreesMessage(uint8_t degrees)
+void servo::convertDegreesMessage()
 {
-    degrees = servo::checkDegrees(degrees);
-    //servo::constante * degrees;
-    return /*Convert the degrees to the right message for a channel on the PWMcontroller*/ 0;
+    servo::checkDegrees();
+    servo::degrees = servo::constante * servo::degrees;
 }
 
 void servo::moveDegrees(uint8_t degrees)
 {
-    degrees = servo::convertDegreesMessage(degrees);
-    servo::kaas.writeChannel(servo::id, degrees);
+    servo::degrees = degrees;
+    servo::convertDegreesMessage();
+    servo::kaas.writeChannel(servo::degrees);
 }

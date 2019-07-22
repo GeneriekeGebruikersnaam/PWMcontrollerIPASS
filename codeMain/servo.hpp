@@ -1,3 +1,9 @@
+//              Copyright Joram van Leeuwen 2019
+// Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)
+
+
 #ifndef SERVO_HPP
 #define SERVO_HPP
 
@@ -18,13 +24,24 @@
 class servo
 {
     private:
+        uint8_t degrees;
         const uint8_t maxRotation;
         const int id;
         PWMcontroller kaas;
-        const uint8_t constante = pow(2, kaas.bits) / maxRotation;;
+        const uint8_t constante = pow(2, kaas.getBits()) / maxRotation;;
 
-        uint8_t checkDegrees(uint8_t degrees);
-        uint8_t convertDegreesMessage(uint8_t degrees);
+/// \brief
+/// Check degrees function
+/// \details
+/// This function checks if the given degrees is an allowed number.
+/// If it's not allowed (either too small or too large), it'll be set to the servo's middle point.
+        void checkDegrees();
+
+/// \brief
+/// Convert degrees to message function
+/// \details
+/// This function converts the given degrees to a message which can be sent to a slave's register using I2C.
+        void convertDegreesMessage();
 
     public:
 
