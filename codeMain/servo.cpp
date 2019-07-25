@@ -17,9 +17,24 @@ void servo::convertDegreesMessage()
     servo::degrees = servo::constante * servo::degrees;
 }
 
+void setOnOff()
+{
+
+}
+
 void servo::moveDegrees(uint8_t degrees)
 {
     servo::degrees = degrees;
     servo::convertDegreesMessage();
-    servo::kaas.writeChannel(servo::degrees);
+
+    for(int i = 0; i < 100; i++)
+    {
+        for(offMoment = 2; offMoment < 2000; offMoment++)
+        {
+            for(pwmOutput = 0; pwmOutput < servo::kaas.getChannels(); pwmOutput++)
+            {
+                servo::kaas.movePWM(pwmOutput, onMoment, offMoment);
+            }
+        }
+    }
 }

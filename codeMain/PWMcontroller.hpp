@@ -23,14 +23,15 @@
 class PWMcontroller
 {
     private:
-        const uint8_t slaveAddress;
         const uint8_t prescaleAddress = 0xFE;
-        hwlib::i2c_bus &i2cBus;
         const int bits;
         const int channels;
         const bool oscillator = false;
     protected:
+        const uint8_t slaveAddress;
+        hwlib::i2c_bus &i2cBus;
         const int oscillatorClock = 0;
+        int frequency;
     public:
 
 /// \brief
@@ -38,11 +39,12 @@ class PWMcontroller
 /// \details
 /// This is a constructor for a PWM controller without an oscillator built in.
 /// It just sets the number of bits and channels the chip has.
-        PWMcontroller(uint8_t slaveAddress, hwlib::i2c_bus &i2cBus, int bits = 0, int channels = 0, int frequency = 0):
+        PWMcontroller(int bits, int channels, uint8_t slaveAddress, hwlib::i2c_bus &i2cBus, int frequency):
+            bits(bits),
+            channels(channels),
             slaveAddress(slaveAddress),
             i2cBus(i2cBus),
-            bits(bits),
-            channels(channels)
+            frequency(frequency)
             {setFrequency(frequency);}
 
 /// \brief
@@ -52,13 +54,15 @@ class PWMcontroller
 /// It sets the bits, channels, whether an oscillator is present or not, and the oscillator's clock frequency in Hz.
 /// The program assumes the oscillator's clock frequency is a constant value.
 /// This constructor can be used to build upon an oscillator further if need be.
-        PWMcontroller(uint8_t slaveAddress, hwlib::i2c_bus &i2cBus, int bits, int channels, bool oscillator, int oscillatorClock, int frequency):
-            slaveAddress(slaveAddress),
-            i2cBus(i2cBus),
+
+        PWMcontroller(int bits, int channels, bool oscillator, uint8_t slaveAddress, hwlib::i2c_bus &i2cBus, int oscillatorClock, int frequency):
             bits(bits),
             channels(channels),
             oscillator(oscillator),
-            oscillatorClock(oscillatorClock)
+            slaveAddress(slaveAddress),
+            i2cBus(i2cBus),
+            oscillatorClock(oscillatorClock),
+            frequency(frequency)
             {setFrequency(frequency);}
 
 /// \brief
@@ -89,6 +93,19 @@ class PWMcontroller
 /// This function returns the number of bits in a PWM controller.
 /// This function thus allows number of bits to be read in other, non-derived, classes.
         int getBits();
+
+/// \brief
+/// Gets the PWMcontroller's frequency
+/// \details
+/// This function returns the onboard frequency of the PWM controller.
+
+        int getFrequency();
+
+/// \brief
+/// Gets the PWMcontroller's number of channels
+/// \details
+/// This function returns the number of channels the PWM controller has.
+        int getChannels();
 };
 
 /// \brief
@@ -98,6 +115,11 @@ class PWMcontroller
 
 class PCA9685 : public PWMcontroller
 {
+    private:
+        const uint8_t LED0_on_L = 0x06;
+        const uint8_t mode1 = 0x00;
+        void initialize();
+
     public:
 
 /// \brief
@@ -107,9 +129,14 @@ class PCA9685 : public PWMcontroller
 /// The PCA9685 has 16 channels, which is set in the constructor.
 /// The PCA9685 has 12 bits and this is set in the constructor.
         PCA9685(hwlib::i2c_bus_bit_banged_scl_sda i2cBus, int frequency):
-            PWMcontroller(0x80, i2cBus, 12, 16, true, 25'000'000, frequency)      // 12 bits and 16 channels are the PCA9685's values.
-            {}                                                              // There is an oscillator and its clock is 25MHz.
+            PWMcontroller(12, 16, 1, 0x40, i2cBus, 25'000'000, frequency)         // 12 bits and 16 channels are the PCA9685's values.
+            {initialize();}                                                 // There is an oscillator and its clock is 25MHz.
        
+/// \brief
+/// Send signal to PCA9685
+/// \details
+/// This function sends a signal to the PCA9685 using I2C.
+        void movePWM(uint8_t pwmOutput, uint16_t onMoment, uint16_t offMoment);
 };
 
 #endif //PWMCONTROLLER_HPP

@@ -27,7 +27,7 @@ class servo
         uint8_t degrees;
         const uint8_t maxRotation;
         const int id;
-        PWMcontroller kaas;
+        PCA9685 kaas;
         const uint8_t constante = pow(2, kaas.getBits()) / maxRotation;;
 
 /// \brief
@@ -35,6 +35,7 @@ class servo
 /// \details
 /// This function checks if the given degrees is an allowed number.
 /// If it's not allowed (either too small or too large), it'll be set to the servo's middle point.
+/// This assumes an active duty cycle of 1-2ms.
         void checkDegrees();
 
 /// \brief
